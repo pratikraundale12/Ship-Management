@@ -9,6 +9,11 @@
 .dashboard-header {
   margin-bottom: 20px;
 }
+.ship-name {
+  color: black;
+  font-weight: bold;
+}
+
 
 .dashboard-header h1 {
   color: #2c3e50;

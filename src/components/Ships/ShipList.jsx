@@ -41,11 +41,11 @@ const ShipList = ({ onEdit }) => {
                 <br />
                 <span style={{ fontSize: '0.85em', color: '#64748b', marginTop: 2 }}>{ship.description}</span>
               </td>
-              <td data-label="IMO Number">{ship.imoNumber}</td>
-              <td data-label="Flag">{ship.flag}</td>
-              <td data-label="Status">{ship.status}</td>
-              <td data-label="Last Maintenance">{ship.lastMaintenance || '-'}</td>
-              <td data-label="Next Maintenance">{ship.nextMaintenance || '-'}</td>
+              <td data-label="IMO Number" style={{ color: document.body.classList.contains('dark-mode') ? '#1976d2' : 'inherit' }}>{ship.imoNumber}</td>
+              <td data-label="Flag" style={{ color: document.body.classList.contains('dark-mode') ? '#1976d2' : 'inherit' }}>{ship.flag}</td>
+              <td data-label="Status" style={{ color: document.body.classList.contains('dark-mode') ? '#1976d2' : 'inherit' }}>{ship.status}</td>
+              <td data-label="Last Maintenance" style={{ color: document.body.classList.contains('dark-mode') ? '#1976d2' : 'inherit' }}>{ship.lastMaintenance || '-'}</td>
+              <td data-label="Next Maintenance" style={{ color: document.body.classList.contains('dark-mode') ? '#1976d2' : 'inherit' }}>{ship.nextMaintenance || '-'}</td>
               <td data-label="Actions">
                 {user?.role === 'Admin' && <button onClick={() => onEdit(ship)}>Edit</button>}
                 {user?.role === 'Admin' && (

@@ -1,5 +1,4 @@
 import React from 'react';
-import { JobsStatusChart, MaintenanceStatusChart } from './components/Dashboard/Charts'; 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ShipsProvider } from './contexts/ShipsContext';
@@ -7,7 +6,9 @@ import { ComponentsProvider } from './contexts/ComponentsContext';
 import { JobsProvider } from './contexts/JobsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { EngineersProvider } from './contexts/EngineersContext';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar'; // Add this import
+import Layout from './components/Layout';
+import MaintenanceCalendar from './pages/MaintenanceCalendar';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -79,6 +80,14 @@ const AppContent = () => {
             element={
               <PrivateRoute>
                 <ComponentsPage />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/maintenance" 
+            element={
+              <PrivateRoute>
+                <MaintenanceCalendar />
               </PrivateRoute>
             } 
           />

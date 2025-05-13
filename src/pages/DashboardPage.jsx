@@ -1,26 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { JobsStatusChart, MaintenanceStatusChart } from '../components/Dashboard/Charts';
 import KPICards from '../components/Dashboard/KPICards';
 import './DashboardPage.css';
+import { useTheme } from '../contexts/ThemeContext'; // ✅ adjust the path if needed
 
 const DashboardPage = () => {
-  // State management
-  const [dashboardData, setDashboardData] = useState({
+
+const { isDarkMode } = useTheme(); // ✅ CORRECT
+
+  
+  // Direct data with dark mode compatible colors
+  const dashboardData = {
     stats: {
       totalShips: 12,
       overdueMaintenance: 4,
-      jobsInProgress: 6,
-      jobsCompleted: 18,
-      highPriorityJobs: 3
+      jobsInProgress: 7,
+      jobsCompleted: 15
     },
     charts: {
       jobsStatus: {
-        inProgress: 6,
-        completed: 18
+        inProgress: 7,
+        completed: 15,
+        colors: {
+          inProgress: isDarkMode ? 'rgba(243, 156, 18, 0.8)' : 'rgba(243, 156, 18, 0.7)',
+          completed: isDarkMode ? 'rgba(46, 204, 113, 0.8)' : 'rgba(46, 204, 113, 0.7)'
+        }
       },
       maintenanceStatus: {
         overdue: 4,
-        onSchedule: 8
+        onSchedule: 8,
+        colors: {
+          overdue: isDarkMode ? 'rgba(231, 76, 60, 0.8)' : 'rgba(231, 76, 60, 0.7)',
+          onSchedule: isDarkMode ? 'rgba(52, 152, 219, 0.8)' : 'rgba(52, 152, 219, 0.7)'
+        }
       }
     },
     recentActivities: [
@@ -31,7 +43,7 @@ const DashboardPage = () => {
         action: "Routine inspection",
         status: "in-progress",
         priority: "high",
-        timestamp: "2025-05-12T10:30:00"
+        timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
       },
       {
         id: 2,
@@ -40,58 +52,29 @@ const DashboardPage = () => {
         action: "GPS calibration",
         status: "completed",
         priority: "medium",
-        timestamp: "2025-05-11T14:15:00"
+        timestamp: new Date(Date.now() - 3600000 * 24).toISOString()
       }
     ],
     ships: ["Ocean Voyager", "Pacific Star", "Atlantic Explorer"]
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState({
-    timeRange: 'month',
-    shipType: 'all',
-    priority: 'all'
-  });
-
-  const handleRefresh = () => {
-    setLoading(true);
-    // Simulate refresh without logout
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  };
-
-  const handleViewUpdate = (activityId, action) => {
-    // Handle view/update action
-    console.log(`${action} activity ${activityId}`);
-    // In a real app, this would navigate or show a modal
-    alert(`${action} activity ${activityId}`);
   };
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const date = new Date(timestamp);
     const diffHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
     if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
     const days = Math.floor(diffHours / 24);
     return `${days} ${days === 1 ? 'day' : 'days'} ago`;
   };
 
-  if (loading) return <div className="loading-spinner">Refreshing Data...</div>;
-
   return (
-    <div className="dashboard-container">
+    <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <div className="dashboard-header">
         <h1>Ship Management Dashboard</h1>
         <div className="dashboard-filters">
           <div className="filter-group">
             <label>Time Range:</label>
-            <select
-              name="timeRange"
-              value={filters.timeRange}
-              onChange={(e) => setFilters({...filters, timeRange: e.target.value})}
-            >
+            <select defaultValue="month" className={isDarkMode ? 'dark-select' : ''}>
               <option value="week">Last Week</option>
               <option value="month">Last Month</option>
               <option value="quarter">Last Quarter</option>
@@ -100,11 +83,7 @@ const DashboardPage = () => {
           
           <div className="filter-group">
             <label>Ship:</label>
-            <select
-              name="shipType"
-              value={filters.shipType}
-              onChange={(e) => setFilters({...filters, shipType: e.target.value})}
-            >
+            <select defaultValue="all" className={isDarkMode ? 'dark-select' : ''}>
               <option value="all">All Ships</option>
               {dashboardData.ships.map(ship => (
                 <option key={ship} value={ship.toLowerCase().replace(' ', '-')}>
@@ -116,11 +95,7 @@ const DashboardPage = () => {
           
           <div className="filter-group">
             <label>Priority:</label>
-            <select
-              name="priority"
-              value={filters.priority}
-              onChange={(e) => setFilters({...filters, priority: e.target.value})}
-            >
+            <select defaultValue="all" className={isDarkMode ? 'dark-select' : ''}>
               <option value="all">All Priorities</option>
               <option value="high">High</option>
               <option value="medium">Medium</option>
@@ -135,33 +110,35 @@ const DashboardPage = () => {
         overdueComponents={dashboardData.stats.overdueMaintenance}
         jobsInProgress={dashboardData.stats.jobsInProgress}
         jobsCompleted={dashboardData.stats.jobsCompleted}
+        isDarkMode={isDarkMode}
       />
 
       <div className="charts-container">
-        <div className="chart-card">
+        <div className={`chart-card ${isDarkMode ? 'dark-card' : ''}`}>
           <h3>Jobs Status</h3>
           <JobsStatusChart 
             inProgress={dashboardData.charts.jobsStatus.inProgress}
             completed={dashboardData.charts.jobsStatus.completed}
+            colors={dashboardData.charts.jobsStatus.colors}
+            isDarkMode={isDarkMode}
           />
         </div>
         
-        <div className="chart-card">
+        <div className={`chart-card ${isDarkMode ? 'dark-card' : ''}`}>
           <h3>Maintenance Status</h3>
           <MaintenanceStatusChart 
             overdue={dashboardData.charts.maintenanceStatus.overdue}
             totalShips={dashboardData.stats.totalShips}
+            colors={dashboardData.charts.maintenanceStatus.colors}
+            isDarkMode={isDarkMode}
           />
         </div>
       </div>
 
-      <div className="recent-activity">
+      <div className={`recent-activity ${isDarkMode ? 'dark-activity' : ''}`}>
         <div className="section-header">
           <h2>Recent Activity</h2>
-          <button 
-            className="refresh-btn"
-            onClick={handleRefresh}
-          >
+          <button className={`refresh-btn ${isDarkMode ? 'dark-refresh' : ''}`}>
             ↻ Refresh
           </button>
         </div>
@@ -170,33 +147,27 @@ const DashboardPage = () => {
           {dashboardData.recentActivities.map(activity => (
             <div 
               key={activity.id} 
-              className={`activity-item ${activity.status} priority-${activity.priority}`}
+              className={`activity-item ${activity.status} priority-${activity.priority} ${isDarkMode ? 'dark-item' : ''}`}
             >
-              <div className="activity-icon">
+              <div className={`activity-icon ${isDarkMode ? 'dark-icon' : ''}`}>
                 {activity.status === 'completed' ? '✓' : '↻'}
               </div>
               
               <div className="activity-content">
                 <div className="activity-header">
                   <span className="ship-name">{activity.ship}</span>
-                  <span className={`priority-badge ${activity.priority}`}>
+                  <span className={`priority-badge ${activity.priority} ${isDarkMode ? 'dark-badge' : ''}`}>
                     {activity.priority}
                   </span>
                 </div>
-                <p className="activity-desc">
+                <p className={`activity-desc ${isDarkMode ? 'dark-text' : ''}`}>
                   {activity.component} - {activity.action}
                 </p>
                 <div className="activity-footer">
-                  <span className="timestamp">
+                  <span className={`timestamp ${isDarkMode ? 'dark-text' : ''}`}>
                     {formatTimeAgo(activity.timestamp)}
                   </span>
-                  <button 
-                    className="action-btn"
-                    onClick={() => handleViewUpdate(
-                      activity.id, 
-                      activity.status === 'completed' ? 'View' : 'Update'
-                    )}
-                  >
+                  <button className={`action-btn ${isDarkMode ? 'dark-action' : ''}`}>
                     {activity.status === 'completed' ? 'View' : 'Update'}
                   </button>
                 </div>
