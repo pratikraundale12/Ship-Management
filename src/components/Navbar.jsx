@@ -247,7 +247,8 @@ const confirmLogout = async () => {
         <div style={styles.logoutOverlay}>
           <div style={styles.logoutDialog}>
             <h2>Confirm Logout</h2>
-            <p>Are you sure you want to logout?</p>
+            <p style={{ color: 'black' }}>Are you sure you want to logout?</p>
+
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1.5rem' }}>
               <button
                 onClick={confirmLogout}

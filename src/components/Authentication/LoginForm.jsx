@@ -21,10 +21,10 @@ const LoginForm = () => {
   return (
     <div className="login-form">
       <div className="form-icon" aria-hidden="true">🚢</div>
-      <h2 className="login-welcome">
-        Welcome to<br />
-        <span className="brand-accent">Ship Management System</span>
-      </h2>
+      <h2 style={{ color: 'black' }}>
+  Welcome to<br />
+  <span style={{ color: 'black' }}>Ship Management System</span>
+  </h2>
       <div className="subtitle">Your modern dashboard for smooth sailing and fleet control</div>
       <form onSubmit={handleSubmit} autoComplete="on">
         <div>
