@@ -98,7 +98,7 @@ const MaintenanceJobs = () => {
       
       {/* Create Job Form */}
       <div style={styles.card}>
-        <h2 style={styles.sectionTitle}>Create New Maintenance Job</h2>
+        <h2>Create New Maintenance Job</h2>
         <form onSubmit={createJob}>
           <div style={styles.formGroup}>
             <div style={styles.formItem}>
@@ -185,7 +185,7 @@ const MaintenanceJobs = () => {
 
       {/* Jobs List with Filters */}
       <div>
-        <h2 style={styles.sectionTitle}>Maintenance Jobs</h2>
+        <h2 style={styles.header}>Maintenance Jobs</h2>
         <div style={styles.filterGroup}>
           <div style={styles.filterItem}>
             <label style={styles.label}>Filter by Ship:</label>
@@ -230,9 +230,9 @@ const MaintenanceJobs = () => {
           </div>
         </div>
         
-        {/* Calendar View */}
+        {/* Calendar View - Hidden on small screens */}
         <div style={styles.calendarContainer}>
-          <h3 style={styles.sectionTitle}>Maintenance Calendar</h3>
+          <h3>Maintenance Calendar</h3>
           <div style={styles.calendar}>
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
               <div key={day} style={styles.calendarHeader}>
@@ -361,25 +361,9 @@ const styles = {
   // Header styles
   header: {
     marginBottom: '20px',
-    fontSize: '28px',
-    color: '#2c3e50',
     '@media (max-width: 768px)': {
       fontSize: '24px',
       textAlign: 'center'
-    },
-    '@media (max-width: 480px)': {
-      fontSize: '20px'
-    }
-  },
-  
-  sectionTitle: {
-    fontSize: '20px',
-    marginBottom: '15px',
-    color: '#2c3e50',
-    borderBottom: '1px solid #eee',
-    paddingBottom: '10px',
-    '@media (max-width: 768px)': {
-      fontSize: '18px'
     }
   },
   
@@ -389,8 +373,6 @@ const styles = {
     padding: '20px',
     border: '1px solid #ddd',
     borderRadius: '8px',
-    backgroundColor: 'white',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
     '@media (max-width: 768px)': {
       padding: '15px',
       marginBottom: '20px'
@@ -411,48 +393,35 @@ const styles = {
   },
   
   formItem: {
-    marginBottom: '15px'
+    marginBottom: '10px'
   },
   
   label: {
     display: 'block',
-    marginBottom: '8px',
-    fontWeight: '500',
-    color: '#34495e',
-    fontSize: '14px'
+    marginBottom: '5px',
+    fontWeight: '500'
   },
   
   select: {
     width: '100%',
-    padding: '10px',
+    padding: '8px',
     borderRadius: '4px',
     border: '1px solid #ddd',
-    fontSize: '14px',
-    backgroundColor: 'white',
-    ':focus': {
-      outline: 'none',
-      borderColor: '#3498db',
-      boxShadow: '0 0 0 2px rgba(52,152,219,0.2)'
-    }
+    fontSize: '14px'
   },
   
   submitButton: {
     marginTop: '15px',
-    padding: '12px 24px',
+    padding: '10px 20px',
     backgroundColor: '#2ecc71',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     fontSize: '16px',
-    fontWeight: '500',
-    transition: 'background-color 0.2s',
-    ':hover': {
-      backgroundColor: '#27ae60'
-    },
     '@media (max-width: 768px)': {
       width: '100%',
-      padding: '14px'
+      padding: '12px'
     }
   },
   
@@ -464,13 +433,13 @@ const styles = {
     flexWrap: 'wrap',
     '@media (max-width: 768px)': {
       flexDirection: 'column',
-      gap: '15px'
+      gap: '10px'
     }
   },
   
   filterItem: {
-    flex: '1',
     minWidth: '200px',
+    flex: '1',
     '@media (max-width: 768px)': {
       minWidth: '100%'
     }
@@ -478,15 +447,9 @@ const styles = {
   
   // Calendar styles
   calendarContainer: {
-    marginBottom: '30px',
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+    marginBottom: '20px',
     '@media (max-width: 768px)': {
-      padding: '15px',
-      marginBottom: '20px'
+      display: 'none' // Hide calendar on small screens
     }
   },
   
@@ -494,76 +457,43 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(7, 1fr)',
     gap: '4px',
-    marginTop: '10px',
-    '@media (max-width: 600px)': {
-      gridTemplateColumns: 'repeat(5, 1fr)'
-    },
-    '@media (max-width: 480px)': {
-      gridTemplateColumns: 'repeat(3, 1fr)'
-    }
+    marginTop: '10px'
   },
   
   calendarHeader: {
     textAlign: 'center',
     fontWeight: 'bold',
-    padding: '10px',
-    backgroundColor: '#f8f9fa',
-    fontSize: '14px',
-    '@media (max-width: 480px)': {
-      padding: '8px',
-      fontSize: '12px'
-    }
+    padding: '8px',
+    backgroundColor: '#f8f9fa'
   },
   
   calendarDay: {
-    padding: '10px',
-    border: '1px solid #eee',
+    padding: '8px',
+    border: '1px solid #ddd',
     minHeight: '80px',
     cursor: 'pointer',
-    transition: 'all 0.2s',
-    backgroundColor: 'white',
+    transition: 'background-color 0.2s',
     ':hover': {
-      backgroundColor: '#f5f5f5'
-    },
-    '@media (max-width: 768px)': {
-      minHeight: '60px',
-      padding: '8px'
-    },
-    '@media (max-width: 480px)': {
-      minHeight: '50px',
-      padding: '6px'
+      backgroundColor: '#f0f0f0'
     }
   },
   
   calendarDate: {
     fontWeight: 'bold',
-    marginBottom: '4px',
-    fontSize: '14px',
-    '@media (max-width: 480px)': {
-      fontSize: '12px'
-    }
+    marginBottom: '4px'
   },
   
   calendarJobs: {
     fontSize: '12px',
-    color: '#666',
-    '@media (max-width: 480px)': {
-      fontSize: '10px'
-    }
+    color: '#666'
   },
   
   // Table styles
   tableContainer: {
     overflowX: 'auto',
     marginTop: '20px',
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    border: '1px solid #ddd',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
     '@media (max-width: 768px)': {
-      overflowX: 'visible',
-      border: 'none',
-      boxShadow: 'none'
+      overflowX: 'visible'
     }
   },
   
@@ -584,32 +514,27 @@ const styles = {
   
   tableRow: {
     borderBottom: '1px solid #eee',
-    ':hover': {
-      backgroundColor: '#f9f9f9'
-    },
     '@media (max-width: 768px)': {
       display: 'block',
-      marginBottom: '15px',
+      marginBottom: '1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
       borderRadius: '4px',
-      padding: '0'
+      padding: '10px'
     }
   },
   
   tableCell: {
     padding: '12px',
     textAlign: 'left',
-    fontSize: '14px',
     '@media (max-width: 768px)': {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: '10px 15px',
+      padding: '8px 12px',
       borderBottom: '1px solid #eee',
       '::before': {
         content: 'attr(data-label)',
         fontWeight: 'bold',
-        marginRight: '15px',
-        color: '#2c3e50'
+        marginRight: '10px'
       }
     }
   },
@@ -619,44 +544,26 @@ const styles = {
     gap: '8px',
     '@media (max-width: 768px)': {
       justifyContent: 'flex-end'
-    },
-    '@media (max-width: 480px)': {
-      flexDirection: 'column',
-      gap: '6px'
     }
   },
   
   actionButton: {
-    padding: '8px 12px',
+    padding: '6px 12px',
     backgroundColor: '#3498db',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     fontSize: '14px',
-    transition: 'background-color 0.2s',
-    ':hover': {
-      backgroundColor: '#2980b9'
-    },
-    ':disabled': {
-      backgroundColor: '#95a5a6',
-      cursor: 'not-allowed'
-    },
-    '@media (max-width: 480px)': {
-      width: '100%',
-      padding: '10px'
+    '@media (max-width: 768px)': {
+      padding: '8px 12px'
     }
   },
   
   noJobs: {
     padding: '20px',
     textAlign: 'center',
-    color: '#7f8c8d',
-    fontSize: '16px',
-    '@media (max-width: 768px)': {
-      padding: '15px',
-      fontSize: '14px'
-    }
+    color: '#7f8c8d'
   }
 };
 
