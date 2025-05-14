@@ -38,8 +38,8 @@ Component Structure: Feature-based
 - No form-level input validation on all fields (optional improvement)
 
 💡 Technical Decisions & Notes
-Chose feature-based folder structure for better scalability and maintainability
-Used CSS Modules for scoped and modular styling
-Chose localStorage to simulate persistent state as per requirements
-Implemented role-based access control entirely on the frontend
-Built with React functional components and Hooks
+- Chose feature-based folder structure for better scalability and maintainability
+- Used CSS Modules for scoped and modular styling
+- Chose localStorage to simulate persistent state as per requirements
+- Implemented role-based access control entirely on the frontend
+- Built with React functional components and Hooks
