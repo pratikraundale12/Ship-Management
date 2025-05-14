@@ -31,7 +31,7 @@ Routing: React Router
 Styling: CSS Modules
 Component Structure: Feature-based
 
-**NOTE: The dashboard is assign with hardcoded values can't chnage 
+**NOTE: The dashboard and Charts are assign with hardcoded values can't chnage 
 NOTE: Some part of the application may or may not be responsive 
 **
 
