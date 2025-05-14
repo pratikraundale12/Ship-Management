@@ -16,7 +16,8 @@ npm run build
 
 Application Architecture Overview
 
-![alt text](image.png)
+![Uploading image.png…]()
+
 
 🔐 User Roles & Access
 This app uses role-based access. Use the following test credentials:
