@@ -8,6 +8,9 @@ const DashboardPage = () => {
 
 const { isDarkMode } = useTheme(); // ✅ CORRECT
 
+  // Add state for notifications
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
+  const [refreshing, setRefreshing] = useState(false);
   
   // Direct data with dark mode compatible colors
   const dashboardData = {
@@ -58,6 +61,9 @@ const { isDarkMode } = useTheme(); // ✅ CORRECT
     ships: ["Ocean Voyager", "Pacific Star", "Atlantic Explorer"]
   };
 
+  // Maintain recent activities state
+  const [activities, setActivities] = useState(dashboardData.recentActivities);
+
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const date = new Date(timestamp);
@@ -67,8 +73,58 @@ const { isDarkMode } = useTheme(); // ✅ CORRECT
     return `${days} ${days === 1 ? 'day' : 'days'} ago`;
   };
 
+  // Function to handle refresh
+  const handleRefresh = () => {
+    setRefreshing(true);
+    
+    // Simulate API fetch delay
+    setTimeout(() => {
+      // Generate new random activity
+      const newActivity = {
+        id: Date.now(),
+        ship: dashboardData.ships[Math.floor(Math.random() * dashboardData.ships.length)],
+        component: ["Engine", "Navigation", "Electrical", "Hull"][Math.floor(Math.random() * 4)],
+        action: ["Maintenance", "Inspection", "Calibration", "Repair"][Math.floor(Math.random() * 4)],
+        status: Math.random() > 0.5 ? "in-progress" : "completed",
+        priority: ["low", "medium", "high"][Math.floor(Math.random() * 3)],
+        timestamp: new Date().toISOString()
+      };
+      
+      // Update activities list
+      setActivities([newActivity, ...activities]);
+      setRefreshing(false);
+      
+      // Show notification
+      showNotification("Activities refreshed successfully!", "success");
+    }, 1000);
+  };
+
+  // Function to show notification
+  const showNotification = (message, type) => {
+    setNotification({ show: true, message, type });
+    
+    // Auto-hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification({ show: false, message: '', type: '' });
+    }, 3000);
+  };
+
+  // Function to handle action button clicks
+  const handleActionClick = (activity) => {
+    const action = activity.status === 'completed' ? 'View' : 'Update';
+    const message = `${action} action for ${activity.ship}: ${activity.component} - ${activity.action}`;
+    showNotification(message, 'info');
+  };
+
   return (
     <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
+      {/* Notification popup */}
+      {notification.show && (
+        <div className={`notification-popup ${notification.type} ${isDarkMode ? 'dark-notification' : ''}`}>
+          {notification.message}
+        </div>
+      )}
+
       <div className="dashboard-header">
         <h1>Ship Management Dashboard</h1>
         <div className="dashboard-filters">
@@ -134,17 +190,21 @@ const { isDarkMode } = useTheme(); // ✅ CORRECT
           />
         </div>
       </div>
-
+      
       <div className={`recent-activity ${isDarkMode ? 'dark-activity' : ''}`}>
         <div className="section-header">
           <h2>Recent Activity</h2>
-          <button className={`refresh-btn ${isDarkMode ? 'dark-refresh' : ''}`}>
-            ↻ Refresh
+          <button 
+            className={`refresh-btn ${isDarkMode ? 'dark-refresh' : ''}`}
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            {refreshing ? 'Refreshing...' : '↻ Refresh'}
           </button>
         </div>
         
         <div className="activity-list">
-          {dashboardData.recentActivities.map(activity => (
+          {activities.map(activity => (
             <div 
               key={activity.id} 
               className={`activity-item ${activity.status} priority-${activity.priority} ${isDarkMode ? 'dark-item' : ''}`}
@@ -167,7 +227,10 @@ const { isDarkMode } = useTheme(); // ✅ CORRECT
                   <span className={`timestamp ${isDarkMode ? 'dark-text' : ''}`}>
                     {formatTimeAgo(activity.timestamp)}
                   </span>
-                  <button className={`action-btn ${isDarkMode ? 'dark-action' : ''}`}>
+                  <button 
+                    className={`action-btn ${isDarkMode ? 'dark-action' : ''}`}
+                    onClick={() => handleActionClick(activity)}
+                  >
                     {activity.status === 'completed' ? 'View' : 'Update'}
                   </button>
                 </div>
@@ -176,6 +239,56 @@ const { isDarkMode } = useTheme(); // ✅ CORRECT
           ))}
         </div>
       </div>
+
+      {/* Add CSS for the notification popup */}
+      <style jsx>{`
+        .notification-popup {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 12px 20px;
+          border-radius: 4px;
+          color: white;
+          z-index: 1000;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+        }
+        
+        .notification-popup.success {
+          background-color: #2ecc71;
+        }
+        
+        .notification-popup.info {
+          background-color: #3498db;
+        }
+        
+        .notification-popup.dark-notification {
+          background-color: #333;
+          color: #fff;
+          border: 1px solid #555;
+        }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+          from { opacity: 1; transform: translateY(0); }
+          to { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        .refresh-btn {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .refresh-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      `}</style>
     </div>
   );
 };
