@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MaintenanceJobs = () => {
   // Sample engineers data
@@ -48,10 +48,34 @@ const MaintenanceJobs = () => {
     assignedTo: ''
   });
 
+  // Notification state
+  const [notification, setNotification] = useState({
+    visible: false,
+    message: '',
+    type: 'success'
+  });
+
   // Filter states
   const [filterShip, setFilterShip] = useState('All Ships');
   const [filterStatus, setFilterStatus] = useState('All Statuses');
   const [filterPriority, setFilterPriority] = useState('All Priorities');
+
+  // Show notification
+  const showNotification = (message, type = 'success') => {
+    setNotification({
+      visible: true,
+      message,
+      type
+    });
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification(prev => ({
+        ...prev,
+        visible: false
+      }));
+    }, 3000);
+  };
 
   // Create new job
   const createJob = (e) => {
@@ -74,6 +98,7 @@ const MaintenanceJobs = () => {
       priority: 'Medium',
       assignedTo: ''
     });
+    showNotification('Job Created Successfully!');
   };
 
   // Update job status
@@ -81,6 +106,7 @@ const MaintenanceJobs = () => {
     setJobs(jobs.map(job => 
       job.id === jobId ? { ...job, status: newStatus } : job
     ));
+    showNotification(newStatus === 'Completed' ? 'Job Completed Successfully!' : 'Job Updated Successfully!');
   };
 
   // Filter jobs
@@ -94,6 +120,13 @@ const MaintenanceJobs = () => {
 
   return (
     <div style={styles.container}>
+      {/* Notification */}
+      {notification.visible && (
+        <div style={styles.notification}>
+          {notification.message}
+        </div>
+      )}
+      
       <h1 style={styles.header}>Maintenance Jobs Management</h1>
       
       {/* Create Job Form */}
@@ -349,6 +382,7 @@ const styles = {
     padding: '20px',
     maxWidth: '1200px',
     margin: '0 auto',
+    position: 'relative',
     '@media (max-width: 1200px)': {
       padding: '15px',
       maxWidth: '100%'
@@ -356,6 +390,23 @@ const styles = {
     '@media (max-width: 768px)': {
       padding: '10px'
     }
+  },
+  
+  // Notification styles
+  notification: {
+    position: 'fixed',
+    top: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: '#2ecc71',
+    color: 'white',
+    padding: '15px 25px',
+    borderRadius: '4px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+    zIndex: 1000,
+    textAlign: 'center',
+    minWidth: '300px',
+    fontSize: '16px'
   },
   
   // Header styles
