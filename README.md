@@ -31,14 +31,17 @@ Routing: React Router
 Styling: CSS Modules
 Component Structure: Feature-based
 
-🚧 Known Issues or Limitations
+**NOTE: The dashboard is assign with hardcoded values can't chnage 
+NOTE: Some part of the application may or may not be responsive 
+**
+🚧** Known Issues or Limitations**
 - No backend integration (data is mocked with localStorage)
 - Basic authentication logic (not secure for production)
 - Static charts (data visualizations are not dynamic)
 - Some part are not responsive 
 - No form-level input validation on all fields (optional improvement)
 
-💡 Technical Decisions & Notes
+**💡 Technical Decisions & Notes**
 - Chose feature-based folder structure for better scalability and maintainability
 - Used CSS Modules for scoped and modular styling
 - Chose localStorage to simulate persistent state as per requirements
