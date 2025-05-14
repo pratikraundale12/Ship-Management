@@ -34,6 +34,7 @@ Component Structure: Feature-based
 **NOTE: The dashboard is assign with hardcoded values can't chnage 
 NOTE: Some part of the application may or may not be responsive 
 **
+
 🚧** Known Issues or Limitations**
 - No backend integration (data is mocked with localStorage)
 - Basic authentication logic (not secure for production)
