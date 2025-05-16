@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth, RequireRole } from '../contexts/AuthContext';
 
 const MaintenanceJobs = () => {
+  const { user } = useAuth();
+  
   // Sample engineers data
   const engineers = [
     { id: 1, name: 'John Smith' },
@@ -129,92 +132,94 @@ const MaintenanceJobs = () => {
       
       <h1 style={styles.header}>Maintenance Jobs Management</h1>
       
-      {/* Create Job Form */}
-      <div style={styles.card}>
-        <h2>Create New Maintenance Job</h2>
-        <form onSubmit={createJob}>
-          <div style={styles.formGroup}>
-            <div style={styles.formItem}>
-              <label style={styles.label}>Ship:</label>
-              <select
-                value={formData.ship}
-                onChange={(e) => setFormData({...formData, ship: e.target.value})}
-                required
-                style={styles.select}
-              >
-                <option value="">Select Ship</option>
-                {ships.map(ship => (
-                  <option key={ship.id} value={ship.name}>{ship.name}</option>
-                ))}
-              </select>
-            </div>
+      {/* Create Job Form - Only visible to Admin and Engineer */}
+      <RequireRole allowedRoles={['Admin', 'Engineer']}>
+        <div style={styles.card}>
+          <h2>Create New Maintenance Job</h2>
+          <form onSubmit={createJob}>
+            <div style={styles.formGroup}>
+              <div style={styles.formItem}>
+                <label style={styles.label}>Ship:</label>
+                <select
+                  value={formData.ship}
+                  onChange={(e) => setFormData({...formData, ship: e.target.value})}
+                  required
+                  style={styles.select}
+                >
+                  <option value="">Select Ship</option>
+                  {ships.map(ship => (
+                    <option key={ship.id} value={ship.name}>{ship.name}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div style={styles.formItem}>
-              <label style={styles.label}>Component:</label>
-              <select
-                value={formData.component}
-                onChange={(e) => setFormData({...formData, component: e.target.value})}
-                required
-                style={styles.select}
-              >
-                <option value="">Select Component</option>
-                {components.map(component => (
-                  <option key={component.id} value={component.name}>{component.name}</option>
-                ))}
-              </select>
-            </div>
+              <div style={styles.formItem}>
+                <label style={styles.label}>Component:</label>
+                <select
+                  value={formData.component}
+                  onChange={(e) => setFormData({...formData, component: e.target.value})}
+                  required
+                  style={styles.select}
+                >
+                  <option value="">Select Component</option>
+                  {components.map(component => (
+                    <option key={component.id} value={component.name}>{component.name}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div style={styles.formItem}>
-              <label style={styles.label}>Job Type:</label>
-              <select
-                value={formData.type}
-                onChange={(e) => setFormData({...formData, type: e.target.value})}
-                required
-                style={styles.select}
-              >
-                <option value="">Select Type</option>
-                {jobTypes.map((type, index) => (
-                  <option key={index} value={type}>{type}</option>
-                ))}
-              </select>
-            </div>
+              <div style={styles.formItem}>
+                <label style={styles.label}>Job Type:</label>
+                <select
+                  value={formData.type}
+                  onChange={(e) => setFormData({...formData, type: e.target.value})}
+                  required
+                  style={styles.select}
+                >
+                  <option value="">Select Type</option>
+                  {jobTypes.map((type, index) => (
+                    <option key={index} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div style={styles.formItem}>
-              <label style={styles.label}>Priority:</label>
-              <select
-                value={formData.priority}
-                onChange={(e) => setFormData({...formData, priority: e.target.value})}
-                style={styles.select}
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
+              <div style={styles.formItem}>
+                <label style={styles.label}>Priority:</label>
+                <select
+                  value={formData.priority}
+                  onChange={(e) => setFormData({...formData, priority: e.target.value})}
+                  style={styles.select}
+                >
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
 
-            <div style={styles.formItem}>
-              <label style={styles.label}>Assigned Engineer:</label>
-              <select
-                value={formData.assignedTo}
-                onChange={(e) => setFormData({...formData, assignedTo: e.target.value})}
-                required
-                style={styles.select}
-              >
-                <option value="">Select Engineer</option>
-                {engineers.map(engineer => (
-                  <option key={engineer.id} value={engineer.name}>{engineer.name}</option>
-                ))}
-              </select>
+              <div style={styles.formItem}>
+                <label style={styles.label}>Assigned Engineer:</label>
+                <select
+                  value={formData.assignedTo}
+                  onChange={(e) => setFormData({...formData, assignedTo: e.target.value})}
+                  required
+                  style={styles.select}
+                >
+                  <option value="">Select Engineer</option>
+                  {engineers.map(engineer => (
+                    <option key={engineer.id} value={engineer.name}>{engineer.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-          <button 
-            type="submit"
-            style={styles.submitButton}
-          >
-            Create Job
-          </button>
-        </form>
-      </div>
+            <button 
+              type="submit"
+              style={styles.submitButton}
+            >
+              Create Job
+            </button>
+          </form>
+        </div>
+      </RequireRole>
 
       {/* Jobs List with Filters */}
       <div>
@@ -341,21 +346,23 @@ const MaintenanceJobs = () => {
                     <td style={styles.tableCell} data-label="Assigned To">{job.assignedTo}</td>
                     <td style={styles.tableCell} data-label="Actions">
                       {job.status !== 'Completed' && (
-                        <div style={styles.actionButtons}>
-                          <button 
-                            onClick={() => updateJobStatus(job.id, 'In Progress')}
-                            style={styles.actionButton}
-                            disabled={job.status === 'In Progress'}
-                          >
-                            Start
-                          </button>
-                          <button 
-                            onClick={() => updateJobStatus(job.id, 'Completed')}
-                            style={{...styles.actionButton, backgroundColor: '#2ecc71'}}
-                          >
-                            Complete
-                          </button>
-                        </div>
+                        <RequireRole allowedRoles={['Admin', 'Engineer']}>
+                          <div style={styles.actionButtons}>
+                            <button 
+                              onClick={() => updateJobStatus(job.id, 'In Progress')}
+                              style={styles.actionButton}
+                              disabled={job.status === 'In Progress'}
+                            >
+                              Start
+                            </button>
+                            <button 
+                              onClick={() => updateJobStatus(job.id, 'Completed')}
+                              style={{...styles.actionButton, backgroundColor: '#2ecc71'}}
+                            >
+                              Complete
+                            </button>
+                          </div>
+                        </RequireRole>
                       )}
                     </td>
                   </tr>
@@ -374,7 +381,7 @@ const MaintenanceJobs = () => {
     </div>
   );
 };
-
+;
 // Responsive styles
 const styles = {
   // Container styles
