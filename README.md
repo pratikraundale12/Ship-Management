@@ -27,6 +27,8 @@ This app uses role-based access. Use the following test credentials:
 | Admin     | `admin@example.com`     | `admin123`     | Full access                                          |
 | Inspector | `inspector@example.com` | `inspector123` | Cannot create/edit/update jobs                       |
 | Engineer  | `engineer@example.com`  |  `engineer123` | Full access (same as Admin)                          |
+
+
 Routing: React Router
 Styling: CSS Modules
 Component Structure: Feature-based
